@@ -48,6 +48,9 @@ public:
     
 };
 
+static bool compare(Employee& obj1, Employee& obj2) {
+    return obj1.getName() < obj2.getName();
+}
 class Employee_Experience : public Employee {
 private:
     float expIn_year;
@@ -158,6 +161,7 @@ public:
     }
 };
 
+
 class Employee_Manager {
 private:
     vector<Employee*> employees;
@@ -217,6 +221,17 @@ public:
             }
         }
         std::cout << "Not Find" << std::endl;
+    }
+    void delete_name(string id) {
+        for (vector<Employee*>::iterator it = employees.begin(); it != employees.end(); ++it) {
+            std::cout << "(*it)->getID() " << (*it)->getId() << endl;
+            if ( (*it)->getId() == id) {
+                employees.erase(it);
+                std::cout << "successfully delete" << endl;
+                return;
+            }
+        }
+        std::cout << "Not delete" << std::endl;
     }
 };
 
@@ -296,6 +311,9 @@ void menu() {
             Employee_Manager::getManager()->find_name(name);
             break;
         case 4:
+            std::cout << "Find name to delete: ";
+            std::getline(std::cin, name);
+            Employee_Manager::getManager()->delete_name(name);
             break;
         case 5:
             Employee_Manager::getManager()->sort_desc();
@@ -316,6 +334,7 @@ void input_data() {
     Employee_Manager::getManager()->add_Employee(fresher1);
     Employee_Manager::getManager()->add_Employee(intern1);
 }
+
 class EmployeeApp {
 private:
     string version;
@@ -334,10 +353,8 @@ public:
 };
 Employee_Manager* Employee_Manager::employee_Managers = nullptr;
 int main() {
-
     EmployeeApp app;
     app.inputdata();
     app.start();
-
     return 0;
 }
