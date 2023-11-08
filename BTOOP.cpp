@@ -38,19 +38,16 @@ public:
     }
     void inputField() {
         cin.ignore();
-        cout << "\ninput id :";
-        getline(cin, id);
-        cout << "\ninput name: ";
-        getline(cin, name);
-        cout << "\ninput Birthday: ";
-        getline(cin, birthday);
+        std::cout << "\ninput id :";
+        getline(std::cin, id);
+        std::cout << "\ninput name: ";
+        getline(std::cin, name);
+        std::cout << "\ninput Birthday: ";
+        getline(std::cin, birthday);
     }
     
 };
 
-static bool compare(Employee& obj1, Employee& obj2) {
-    return obj1.getName() < obj2.getName();
-}
 class Employee_Experience : public Employee {
 private:
     float expIn_year;
@@ -86,11 +83,11 @@ public:
     }
     void inputField() {
         Employee::inputField();
-        cout << "\n expIn_year: ";
-        cin >> expIn_year;
-        cin.ignore();
-        cout << "\n proskill: ";
-        getline(cin, proskill);
+        std::cout << "\n expIn_year: ";
+        std::cin >> expIn_year;
+        std::cin.ignore();
+        std::cout << "\n proskill: ";
+        getline(std::cin, proskill);
     }
 
 };
@@ -120,10 +117,10 @@ public:
     }
     void inputField() {
         Employee::inputField();
-        cout << "\n gradution_date: ";
+        std:: cout << "\n gradution_date: ";
         getline(cin, gradution_date);
-        cout << "\n GPA: ";
-        cin >> gpa;
+        std::cout << "\n GPA: ";
+        std::cin >> gpa;
     }
 };
 
@@ -154,13 +151,12 @@ public:
 
     void inputField() {
         Employee::inputField();
-        cout << "\nMajors: ";
-        getline(cin, majors);
-        cout << "\nSemester: ";
-        cin >> semester;
+        std::cout << "\nMajors: ";
+        getline(std::cin, majors);
+        std::cout << "\nSemester: ";
+        std::cin >> semester;
     }
 };
-
 
 class Employee_Manager {
 private:
@@ -193,8 +189,36 @@ public:
             }
         }
     }
+    void sort_asc() {
+        int length = employees.size();
+        for (int i = 0; i < employees.size() - 1; i++) {
+            for (int j = 1; j < employees.size(); j++) {
+                if (employees[i]->getName() > employees[j]->getName()) {
+                    swap(employees[i], employees[j]);
+                }
+            }
+        }
+    }
+    void sort_desc() {
+        int length = employees.size();
+        for (int i = 0; i < employees.size() - 1; i++) {
+            for (int j = 1; j < employees.size(); j++) {
+                if (employees[i]->getName() < employees[j]->getName()) {
+                    swap(employees[i], employees[j]);
+                }
+            }
+        }
+    }
+    void find_name(string name) {
+        for (Employee* e : employees) {
+            if (e->getName() == name) {
+                std::cout << "Find : " << e->getName() << std::endl;
+                return;
+            }
+        }
+        std::cout << "Not Find" << std::endl;
+    }
 };
-
 
 void displayMenu() {
     std::cout << "-------------------------------------" << std::endl;
@@ -256,6 +280,7 @@ void menu() {
     while (true) {
         displayMenu();
         int choice;
+        string name;
         std::cin >> choice;
         std::cin.ignore();
         switch (choice) {
@@ -266,10 +291,14 @@ void menu() {
             menuInsert();
             break;
         case 3:
+            std::cout << "Find name : ";
+            std::getline(std::cin, name);
+            Employee_Manager::getManager()->find_name(name);
             break;
         case 4:
             break;
         case 5:
+            Employee_Manager::getManager()->sort_desc();
             break;
         case 6: 
             return;
@@ -287,7 +316,6 @@ void input_data() {
     Employee_Manager::getManager()->add_Employee(fresher1);
     Employee_Manager::getManager()->add_Employee(intern1);
 }
-
 class EmployeeApp {
 private:
     string version;
@@ -305,7 +333,6 @@ public:
     }
 };
 Employee_Manager* Employee_Manager::employee_Managers = nullptr;
-
 int main() {
 
     EmployeeApp app;
