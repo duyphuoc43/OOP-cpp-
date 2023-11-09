@@ -272,31 +272,6 @@ public:
     }
 };
 
-class EmployeeApp {
-private:
-    string version;
-public:
-    EmployeeApp() {
-        version = "1.0";
-    }
-    void inputdata() {
-        Employee_Experience* experience1 = new Employee_Experience("1", "Ban", "01/01/1990", 5.0, "C++");
-        Employee_Fresher* fresher1 = new Employee_Fresher("2", "Huy", "02/02/1995", "10/05/2022", 3.5);
-        Employee_Intern* intern1 = new Employee_Intern("3", "Van", "03/03/2000", "CNTT", 2);
-        Employee_Intern* intern2 = new Employee_Intern("4", "Binh", "03/03/2000", "CNTT", 4);
-        Employee_Intern* intern3 = new Employee_Intern("5", "An", "11/02/2000", "CNTT", 7);
-        Employee_Fresher* fresher1 = new Employee_Fresher("6", "Hy", "02/02/1995", "10/05/2022", 3.5);
-        Employee_Manager::getManager()->add_Employee(experience1);
-        Employee_Manager::getManager()->add_Employee(fresher1);
-        Employee_Manager::getManager()->add_Employee(intern1);
-        Employee_Manager::getManager()->add_Employee(intern2);
-        Employee_Manager::getManager()->add_Employee(intern3);
-    }
-    void start() {
-        menu();
-    }
-};
-Employee_Manager* Employee_Manager::employee_Managers = nullptr;
 
 bool ascending(Employee o1, Employee o2) {
     return o1.getName() < o2.getName();
@@ -413,6 +388,33 @@ void menu() {
 }
 
 
+class EmployeeApp {
+private:
+    string version;
+public:
+    EmployeeApp() {
+        version = "1.0";
+    }
+    void inputdata() {
+        Employee_Experience* experience1 = new Employee_Experience("1", "Ban", "01/01/1990", 5.0, "C++");
+        Employee_Fresher* fresher1 = new Employee_Fresher("2", "Huy", "02/02/1995", "10/05/2022", 3.5);
+        Employee_Intern* intern1 = new Employee_Intern("3", "Van", "03/03/2000", "CNTT", 2);
+        Employee_Intern* intern2 = new Employee_Intern("4", "Binh", "03/03/2000", "CNTT", 4);
+        Employee_Intern* intern3 = new Employee_Intern("5", "An", "11/02/2000", "CNTT", 7);
+        Employee_Fresher* fresher2 = new Employee_Fresher("6", "Hy", "02/02/1995", "10/05/2022", 3.5);
+        Employee_Manager::getManager()->add_Employee(experience1);
+        Employee_Manager::getManager()->add_Employee(fresher1);
+        Employee_Manager::getManager()->add_Employee(fresher2);
+        Employee_Manager::getManager()->add_Employee(intern1);
+        Employee_Manager::getManager()->add_Employee(intern2);
+        Employee_Manager::getManager()->add_Employee(intern3);
+
+    }
+    void start() {
+        menu();
+    }
+};
+Employee_Manager* Employee_Manager::employee_Managers = nullptr;
 
 int main() {
     EmployeeApp app;
