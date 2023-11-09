@@ -48,9 +48,6 @@ public:
     
 };
 
-static bool compare(Employee& obj1, Employee& obj2) {
-    return obj1.getName() < obj2.getName();
-}
 class Employee_Experience : public Employee {
 private:
     float expIn_year;
@@ -161,7 +158,6 @@ public:
     }
 };
 
-
 class Employee_Manager {
 private:
     vector<Employee*> employees;
@@ -177,6 +173,10 @@ public:
         }
         return employee_Managers;
     }
+    vector<Employee*> getListEmployee() {
+        return employees;
+    }
+
     void displayInfo() {
         for (const auto& employee : employees) {
             if (dynamic_cast<Employee_Experience*>(employee) != nullptr) {
@@ -196,8 +196,8 @@ public:
     void sort_asc() {
         int length = employees.size();
         for (int i = 0; i < employees.size() - 1; i++) {
-            for (int j = 1; j < employees.size(); j++) {
-                if (employees[i]->getName() > employees[j]->getName()) {
+            for (int j = i+1; j < employees.size(); j++) {
+                if ((employees[i]->getName()) > (employees[j]->getName())) {
                     swap(employees[i], employees[j]);
                 }
             }
@@ -222,7 +222,44 @@ public:
         }
         std::cout << "Not Find" << std::endl;
     }
-    void delete_name(string id) {
+    void update_name(string name) {
+        for (Employee* e : employees) {
+            if (e->getName() == name) {
+                std::cout << "Find : " << e->getName() << std::endl;
+                cout << "Update : " << endl;
+                if (dynamic_cast<Employee_Experience*>(e) != nullptr) {
+                    Employee_Experience* exp = dynamic_cast<Employee_Experience*>(e);
+                    float exp_year;
+                    std::cout << "Exp in year: "; std::cin >> exp_year;
+                    exp->setExpIn_year(exp_year);
+                    string proskill;
+                    std::cout << "proskill: "; getline(std::cin, proskill);
+                    exp->setProskill(proskill);
+                    std::cout << " Employee_Experience: " << *exp << std::endl;
+                }
+                else if (dynamic_cast<Employee_Fresher*>(e) != nullptr) {
+                    Employee_Fresher* fresher = dynamic_cast<Employee_Fresher*>(e);
+                    string gradution_date;
+                    std::cout << "gradution_date: "; getline(std::cin, gradution_date);
+                    fresher->setGradution_date(gradution_date);
+                    float gpa;
+                    std::cout << "gpa: "; std::cin >> gpa;
+                    fresher->setGpa(gpa);
+                    std::cout << "Employee_Fresher: " << *fresher << std::endl;
+                }
+                else if (dynamic_cast<Employee_Intern*>(e) != nullptr) {
+                    Employee_Intern* intern = dynamic_cast<Employee_Intern*>(e);
+                    int semester;
+                    std::cout << "Semester "; std::cin >> semester;
+                    intern->setSemester(semester);
+                    std::cout << "Employee_Intern: " << *intern << std::endl;
+                }
+                return;
+            }
+        }
+        std::cout << "Not Find" << std::endl;
+    }
+    void delete_id(string id) {
         for (vector<Employee*>::iterator it = employees.begin(); it != employees.end(); ++it) {
             std::cout << "(*it)->getID() " << (*it)->getId() << endl;
             if ( (*it)->getId() == id) {
@@ -235,6 +272,48 @@ public:
     }
 };
 
+class EmployeeApp {
+private:
+    string version;
+public:
+    EmployeeApp() {
+        version = "1.0";
+    }
+    void inputdata() {
+        Employee_Experience* experience1 = new Employee_Experience("1", "Ban", "01/01/1990", 5.0, "C++");
+        Employee_Fresher* fresher1 = new Employee_Fresher("2", "Huy", "02/02/1995", "10/05/2022", 3.5);
+        Employee_Intern* intern1 = new Employee_Intern("3", "Van", "03/03/2000", "CNTT", 2);
+        Employee_Intern* intern2 = new Employee_Intern("4", "Binh", "03/03/2000", "CNTT", 4);
+        Employee_Intern* intern3 = new Employee_Intern("5", "An", "11/02/2000", "CNTT", 7);
+        Employee_Fresher* fresher1 = new Employee_Fresher("6", "Hy", "02/02/1995", "10/05/2022", 3.5);
+        Employee_Manager::getManager()->add_Employee(experience1);
+        Employee_Manager::getManager()->add_Employee(fresher1);
+        Employee_Manager::getManager()->add_Employee(intern1);
+        Employee_Manager::getManager()->add_Employee(intern2);
+        Employee_Manager::getManager()->add_Employee(intern3);
+    }
+    void start() {
+        menu();
+    }
+};
+Employee_Manager* Employee_Manager::employee_Managers = nullptr;
+
+bool ascending(Employee o1, Employee o2) {
+    return o1.getName() < o2.getName();
+}
+bool descending(Employee o1, Employee o2) {
+    return o1.getName() > o2.getName();
+}
+void sort_name(vector<Employee*> employees, bool(*compare)(Employee, Employee)) {
+    for (int i = 0; i < employees.size() - 1; i++) {
+        for (int j = i+1; j < employees.size(); j++) {
+            if (!(compare)(*employees[i], *employees[j])) {
+                swap(*employees[i], *employees[j]);
+            }
+        }
+    }
+}
+
 void displayMenu() {
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "Menu:" << std::endl;
@@ -243,7 +322,8 @@ void displayMenu() {
     std::cout << "3. sua thong tin nhan vien" << std::endl;
     std::cout << "4. xoa nhan vien" << std::endl;
     std::cout << "5. sap xep theo ten" << std::endl;
-    std::cout << "6. thoat" << std::endl;
+    std::cout << "6.Tim kiem nhan vien theo id " << std::endl;
+    std::cout << "7. thoat" << std::endl;
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "chon tuy chon: ";
 }
@@ -306,19 +386,24 @@ void menu() {
             menuInsert();
             break;
         case 3:
+            std::cout << "Find name: ";
+            std::getline(std::cin, name);
+            Employee_Manager::getManager()->update_name(name);
+            break;
+        case 4:
+            std::cout << "Find id to delete: ";
+            std::getline(std::cin, name);
+            Employee_Manager::getManager()->delete_id(name);
+            break;
+        case 5:
+            sort_name(Employee_Manager::getManager()->getListEmployee(), descending);
+            break;
+        case 6: 
             std::cout << "Find name : ";
             std::getline(std::cin, name);
             Employee_Manager::getManager()->find_name(name);
             break;
-        case 4:
-            std::cout << "Find name to delete: ";
-            std::getline(std::cin, name);
-            Employee_Manager::getManager()->delete_name(name);
-            break;
-        case 5:
-            Employee_Manager::getManager()->sort_desc();
-            break;
-        case 6: 
+        case 7: 
             return;
         default:
             std::cout << "Lựa chọn không hợp lệ." << std::endl;
@@ -326,32 +411,9 @@ void menu() {
         }
     }
 }
-void input_data() {
-    Employee_Experience* experience1 = new Employee_Experience("1", "John", "01/01/1990", 5.0, "C++");
-    Employee_Fresher* fresher1 = new Employee_Fresher("2", "Alice", "02/02/1995", "10/05/2022", 3.5);
-    Employee_Intern* intern1 = new Employee_Intern("3", "Bob", "03/03/2000", "Computer Science", 2);
-    Employee_Manager::getManager()->add_Employee(experience1);
-    Employee_Manager::getManager()->add_Employee(fresher1);
-    Employee_Manager::getManager()->add_Employee(intern1);
-}
 
-class EmployeeApp {
-private:
-    string version;
-public:
-    void inputdata() {
-        Employee_Experience* experience1 = new Employee_Experience("1", "John", "01/01/1990", 5.0, "C++");
-        Employee_Fresher* fresher1 = new Employee_Fresher("2", "Alice", "02/02/1995", "10/05/2022", 3.5);
-        Employee_Intern* intern1 = new Employee_Intern("3", "Bob", "03/03/2000", "Computer Science", 2);
-        Employee_Manager::getManager()->add_Employee(experience1);
-        Employee_Manager::getManager()->add_Employee(fresher1);
-        Employee_Manager::getManager()->add_Employee(intern1);
-    }
-    void start() {
-        menu();
-    }
-};
-Employee_Manager* Employee_Manager::employee_Managers = nullptr;
+
+
 int main() {
     EmployeeApp app;
     app.inputdata();
