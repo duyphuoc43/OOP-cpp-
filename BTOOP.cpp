@@ -10,32 +10,48 @@ private:
     string id;
     string name;
     string birthday;
+
 public:
     Employee() {}
+
+    Employee(string _id, string _name, string _birthday) : id(_id), name(_name), birthday(_birthday) {} 
+    
+    // copy constructor
+    Employee(const Employee &obj) {
+        std::cout << "copy constructor: cap phat bo nho cho con tro" << endl;
+    } 
+    
     virtual ~Employee() {} 
-    Employee(string _id, string _name, string _birthday) : id(_id), name(_name), birthday(_birthday) {}
+    
     string getId() {
         return id;
     }
+    
     void setId(string _id) {
         id = _id;
     }
+    
     string getName() {
         return name;
     }
+    
     void setName(string _name) {
         name = _name;
     }
+    
     string getBirthday() {
         return birthday;
     }
+    
     void setBirthday(string _birthday) {
         birthday = _birthday;
     }
+    
     friend ostream& operator<<(ostream& os, const Employee& obj) {
         os << "ID: " << obj.id << ", Name: " << obj.name << ", Birthday: " << obj.birthday;
         return os;
     }
+    
     void inputField() {
         cin.ignore();
         std::cout << "\ninput id :";
@@ -52,35 +68,48 @@ class Employee_Experience : public Employee {
 private:
     float expIn_year;
     string proskill;
+
 public:
     Employee_Experience() {}
+
     Employee_Experience(string _id, string _name, string _birthday, float _expIn_year, string _proskill) : Employee(_id, _name, _birthday), expIn_year(_expIn_year), proskill(_proskill) {}
+
+    //copy contructor
+    Employee_Experience(const Employee_Experience &obj) {}
 
     void setExpIn_year(float _expIn_year) {
         expIn_year = _expIn_year;
     }
+
     float getExpIn_year() {
         return expIn_year;
     }
+
     void setProskill(string _proskill) {
         proskill = _proskill;
     }
+
     string getProskill() {
         return proskill;
     }
+
     float getInfoExIn_year(int expIn_year) {
         return float(int(expIn_year));
     }
+
     float getInfoExIn_year(float expIn_year) {
         return float(expIn_year);
     }
+
     float getInfoExIn_year(string expIn_year) {
         return float(stod(expIn_year));
     }
+
     friend ostream& operator<<(ostream& os, const Employee_Experience& obj) {
         os << static_cast<const Employee&>(obj) << ", Experience in years: " << obj.expIn_year << ", Proskill: " << obj.proskill;
         return os;
     }
+
     void inputField() {
         Employee::inputField();
         std::cout << "\n expIn_year: ";
@@ -96,25 +125,36 @@ class Employee_Fresher : public Employee {
 private:
     string gradution_date;
     float gpa;
+
 public:
     Employee_Fresher() {}
+
     Employee_Fresher(string _id, string _name, string _birthday, string _gradution_date, float _gpa) : Employee(_id, _name, _birthday), gradution_date(_gradution_date), gpa(_gpa) {}
+
+    //copy constructor
+    Employee_Fresher (const Employee_Fresher &obj) {}
+
     void setGradution_date(string _gradution_date) {
         gradution_date = _gradution_date;
     }
+
     string getGradution_date() {
         return gradution_date;
     }
+
     void setGpa(float _gpa) {
         gpa = _gpa;
     }
-    float getGpa() {
+
+    float getGpa() const {
         return gpa;
     }
+
     friend ostream& operator<<(ostream& os, const Employee_Fresher& obj) {
         os << static_cast<const Employee&>(obj) << ", Gradution Date: " << obj.gradution_date << ", GPA: " << obj.gpa;
         return os;
     }
+
     void inputField() {
         Employee::inputField();
         std:: cout << "\n gradution_date: ";
@@ -122,21 +162,30 @@ public:
         std::cout << "\n GPA: ";
         std::cin >> gpa;
     }
+
 };
 
 class Employee_Intern : public Employee {
 private:
     string majors;
     int semester;
+
 public:
     Employee_Intern() {}
+
     Employee_Intern(string _id, string _name, string _birthday, string _majors, int _semester) : Employee(_id, _name, _birthday), majors(_majors), semester(_semester) {}
+
+    //copy constructor
+    Employee_Intern(const Employee_Intern &obj) {}
+
     void setMajors(string _majors) {
         majors = _majors;
     }
+
     string getMajors() {
         return majors;
     }
+
     void setSemester(int _semester) {
         semester = _semester;
     }
@@ -144,6 +193,7 @@ public:
     int getSemester() {
         return semester;
     }
+
     friend ostream& operator<<(ostream& os, const Employee_Intern& obj) {
         os << static_cast<const Employee&>(obj) << ", Major: " << obj.majors << ", Semester: " << obj.semester;
         return os;
@@ -163,16 +213,19 @@ private:
     vector<Employee*> employees;
     static Employee_Manager* employee_Managers;
     Employee_Manager() {}
+
 public:
     void add_Employee(Employee* employee) {
         employees.push_back(employee);
     }
+
     static Employee_Manager* getManager() {
         if (employee_Managers == nullptr) {
             employee_Managers = new Employee_Manager();
         }
         return employee_Managers;
     }
+
     vector<Employee*> getListEmployee() {
         return employees;
     }
@@ -193,6 +246,7 @@ public:
             }
         }
     }
+
     void sort_asc() {
         int length = employees.size();
         for (int i = 0; i < employees.size() - 1; i++) {
@@ -203,6 +257,7 @@ public:
             }
         }
     }
+
     void sort_desc() {
         int length = employees.size();
         for (int i = 0; i < employees.size() - 1; i++) {
@@ -213,6 +268,7 @@ public:
             }
         }
     }
+ 
     void find_name(string name) {
         for (Employee* e : employees) {
             if (e->getName() == name) {
@@ -222,6 +278,7 @@ public:
         }
         std::cout << "Not Find" << std::endl;
     }
+
     void update_name(string name) {
         for (Employee* e : employees) {
             if (e->getName() == name) {
@@ -259,6 +316,7 @@ public:
         }
         std::cout << "Not Find" << std::endl;
     }
+ 
     void delete_id(string id) {
         for (vector<Employee*>::iterator it = employees.begin(); it != employees.end(); ++it) {
             std::cout << "(*it)->getID() " << (*it)->getId() << endl;
@@ -270,15 +328,13 @@ public:
         }
         std::cout << "Not delete" << std::endl;
     }
+
 };
 
-
-bool ascending(Employee o1, Employee o2) {
-    return o1.getName() < o2.getName();
-}
 bool descending(Employee o1, Employee o2) {
     return o1.getName() > o2.getName();
 }
+
 void sort_name(vector<Employee*> employees, bool(*compare)(Employee, Employee)) {
     for (int i = 0; i < employees.size() - 1; i++) {
         for (int j = i+1; j < employees.size(); j++) {
@@ -302,6 +358,7 @@ void displayMenu() {
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "chon tuy chon: ";
 }
+
 void displayMenuInsert() {
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "Menu:" << std::endl;
@@ -313,6 +370,7 @@ void displayMenuInsert() {
     std::cout << "chon tuy chon: ";
     
 }
+
 void menuInsert() {
     while (true) {
         displayMenuInsert();
@@ -346,6 +404,7 @@ void menuInsert() {
         }
     }
 }
+
 void menu() {
     while (true) {
         displayMenu();
@@ -387,14 +446,15 @@ void menu() {
     }
 }
 
-
 class EmployeeApp {
 private:
     string version;
+
 public:
     EmployeeApp() {
         version = "1.0";
     }
+
     void inputdata() {
         Employee_Experience* experience1 = new Employee_Experience("1", "Ban", "01/01/1990", 5.0, "C++");
         Employee_Fresher* fresher1 = new Employee_Fresher("2", "Huy", "02/02/1995", "10/05/2022", 3.5);
@@ -410,10 +470,13 @@ public:
         Employee_Manager::getManager()->add_Employee(intern3);
 
     }
+ 
     void start() {
         menu();
     }
+
 };
+
 Employee_Manager* Employee_Manager::employee_Managers = nullptr;
 
 int main() {
